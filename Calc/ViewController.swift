@@ -26,7 +26,7 @@ extension String {
 extension String {
     var isOperator: Bool {
         get {
-            return ("+ - / * ^ %" as NSString).contains(self)
+            return ("+ - / *" as NSString).contains(self)
         }
     }
     var isNumber: Bool {
@@ -42,14 +42,11 @@ extension String {
                 return 1
             case "*":
                 return 1
-            case "%":
-                return 1
+
             case "+":
                 return 2
             case "-":
                 return 2
-            case "^":
-                return 0
             default:
                 return -1
             }
@@ -171,7 +168,7 @@ class MathParser {
                     result = n2/n1
                 }
                 
-                newStack.push(value: "\result)")
+                newStack.push(value: "\(result)")
             }
         }
         return Double(newStack.pop())!
@@ -197,28 +194,11 @@ class ViewController: UIViewController {
     var isAlreadyTyping = false
     var isLastTapOperator = false
     var hasDecimal = false
-    var nums: [Float] = []
-    var opers: [String] = []
     var numParanLeft = 0
     
     @IBOutlet weak var answerDisplay: UILabel!
     @IBOutlet weak var equationDisplay: UILabel!
     
-    func precedence(oper: String) -> Int {
-        var prec = 0;
-        if oper == "+" || oper == "-" {
-            prec = 1
-        } else if oper == "x" || oper == "/" {
-            prec = 2
-        }
-        return prec
-    }
-    
-    func parseEquation(equat: String) -> String {
-        var output = ""
-        output = output + ""
-        return output
-    }
 
     
     @IBAction func tapNum(_ sender: UIButton) {
@@ -333,11 +313,9 @@ class ViewController: UIViewController {
         if numParanLeft != 0 {
             print("Please close all brackets")
         }
-        let output = parseEquation(equat: equationDisplay.text!)
-        answerDisplay.text = output
-        
-        nums = []
-        opers = []
+        let calculator: MathParser = MathParser()
+        let output = calculator.parse(tokens: equationDisplay.text!)
+        answerDisplay.text = String(output)
     }
     
     
